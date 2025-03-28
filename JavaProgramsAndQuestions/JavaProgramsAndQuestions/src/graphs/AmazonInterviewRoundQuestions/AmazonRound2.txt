@@ -1,0 +1,170 @@
+Assume a Cartesian coordinate system. You are given the position coordinates (x,y) of a set of N routers. 
+All routers are capable of sending and receiving signals. 
+Out of these N routers, One router is termed as “Source” and one specific router is termed as “Destination”. 
+
+1. Each router has a maximum transmission range (K units)
+2. Each router will shut down after transmitting a message
+
+Determine whether the “Destination” router will receive a signal transmitted by the “Sender” router
+
+Constraints : 
+
+1. N <= 10^4, K <= 10
+2. −10^6≤x,y≤10^6
+
+Sample Input 1:
+4
+0 0
+3 4
+6 8
+9 12
+5
+3
+0 2
+0 1
+1 3 
+
+YES
+YES
+YES
+
+Sample Output 1:
+YES
+
+Sample Input 2:
+3
+0 0
+10 10
+20 20
+5
+0 2
+
+Sample Output 2:
+NO
+
+
+
+/*
+    1. Graph
+        Store routers List
+        roture - Node 
+        ED
+        
+    2. BFS
+        SourceIndex -start
+        Queue 
+        visted boolean 
+        destinationIndex
+        
+    3. Check the transmission Range (x1 - x2)
+*/
+
+
+//Helper Function
+static boolean isWithinRange(Routeer r1, Router r2, int k){
+    return (Math.pow(r1.x-r2.x,2)) + (Math.pow(r1.y-r2.y,2)); ---> // ED
+}
+
+
+
+static boolean willTranmit(List<Router> routers, int sourceIndex, int k, int destinationIndex){
+    int n = routers.size();
+    
+    if(n == 0){
+        return false;
+    }
+    
+    if(sourceIndex == destinationIndex){
+        return true;
+    }
+    
+    Queue<Interger> q = new LinkedList<>();
+    
+    boolean[] visited = new boolean[n];
+    
+    q.add(sourceIndex);
+    
+    visited[sourceIndex] = true;
+    
+    while(!q.isEmpty()){
+        int currentNode = q.poll();
+        
+        Router currentRouter = routers.get(current);
+        
+        for(int i=0; i<N; i++){
+            if(!visited[i] && isWithinRange(currentNode,routers.get(i),k)){
+                if(i == destinationIndex){
+                    return true;
+                }
+                
+                q.add(i);
+                visited[i] = true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+
+Suppose an array of length n sorted in ascending order is rotated between 1 and n times. 
+For example, the array nums = [0,1,2,4,5,6,7] might become:
+
+* [4,5,6,7,0,1,2] if it was rotated 4 times.
+* [0,1,2,4,5,6,7] if it was rotated 7 times.
+
+Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] 1 time results in the 
+array [a[n-1], a[0], a[1], a[2], ..., a[n-2]].
+Given the sorted rotated array nums of unique elements, return the minimum element of this array.
+
+Example 1:
+
+Input: nums = [3,4,5,1,2]Output: 1Explanation: The original array was [1,2,3,4,5] rotated 3 times.
+
+Example 2:
+
+Input: nums = [4,5,6,7,0,1,2]Output: 0Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.
+
+Example 3:
+
+Input: nums = [11,13,15,17]Output: 11Explanation: The original array was [11,13,15,17] and it was rotated 4 times. 
+
+ 
+Constraints:
+
+* n == nums.length
+* 1 <= n <= 5000
+* -5000 <= nums[i] <= 5000
+* All the integers of nums are unique.
+* nums is sorted and rotated between 1 and n times.
+
+
+
+/*
+    1. Binary Search:
+        if(nums[mid] > num[right]) --> minimum in the right side
+        
+        if(num[mid] <= num[right]) --> minimum in left side
+        
+        loop until left == right --> leftInd point the mini idex ele
+*/
+int findMin(int[] nums){
+    
+    int left = 0, right = nums.length-1;
+    
+    while(left <right){
+        int mid = left + (right - left) /2;
+        
+        if(nums[mid] > nums[right]){
+            left = mid + 1;
+        }
+        else{
+            right = mid;
+        }
+    }
+    
+    return nums[left];
+}
+
+
+
